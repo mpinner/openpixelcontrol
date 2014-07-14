@@ -20,10 +20,10 @@ specific language governing permissions and limitations under the License. */
 #include <sys/ioctl.h>
 #include "types.h"
 
-#define SPI_BITS_PER_WORD 8
+#define SPI_BITS_PER_WORD 12
 #define SPI_MAX_WRITE 4096
 #define SPI_DEFAULT_SPEED_HZ 8000000
-#define TIMEOUT_MS 10000
+#define TIMEOUT_MS 100000
 
 // Parse command line args to extract port number (argv[1]) and speed (argv[2]).
 // Does not alter values if no appropriate arg is present, so default values
