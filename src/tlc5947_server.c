@@ -21,17 +21,38 @@ void tlC5947_put_pixels(int fd, u8 spi_data_tx[], u32 spi_speed_hz,
                        u16 count, pixel* pixels, order_t order) {
   int i;
   pixel* p;
-  u12* d;
+  u8* d;
 
-  u12 brightness;
+  u8 zero = 0;
+
+  u8 brightness;
   
   d = spi_data_tx;
   for (i = 0, p = pixels; i < count; i++, p++) {
 
+    switch (order)
+    {
+    case RGB:
+      *d++ = p->r;
+      *d++ = zero;
+      *d++ = zero;
+      break;
+    case GRB:
+      *d++ = p->g;
+      *d++ = zero;
+      *d++ = zero;
+      break;
+    case BGR:
+      *d++ = p->b;
+      *d++ = zero;
+      *d++ = zero;
+      break;
+   
+
     // here we do a brightness calc
     // and transcode our colorspace to 12-bits
     
-    *d++ = (p->r + p->g + p->b ) / 2;
+   // *d++ = (p->r + p->g + p->b ) / 2;
    
   }
   spi_transfer(fd, spi_speed_hz, spi_data_tx, 0, 
