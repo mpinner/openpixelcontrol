@@ -4,7 +4,7 @@ ifeq ($(platform),Darwin)
   ALL=bin/dummy_client bin/dummy_server bin/gl_server
   GL_OPTS=-framework OpenGL -framework GLUT -Wno-deprecated-declarations
 else ifeq ($(platform),Linux)
-  ALL=bin/dummy_client bin/dummy_server bin/tcl_server bin/ws2801_server bin/lpd8806_server bin/gl_server
+  ALL=bin/dummy_client bin/dummy_server bin/tcl_server bin/ws2801_server bin/lpd8806_server bin/gl_server bin/tlc5947_server
   GL_OPTS=-lGL -lglut -lGLU -lm
 endif
 
@@ -36,3 +36,8 @@ bin/lpd8806_server: src/lpd8806_server.c src/opc_server.c src/spi.c
 bin/gl_server: src/gl_server.c src/opc_server.c src/cJSON.c
 	mkdir -p bin
 	gcc -o $@ $^ $(GL_OPTS)
+
+bin/tlc5947_server: src/tlc5947_server.c src/opc_server.c src/spi.c
+	mkdir -p bin
+	gcc -o $@ $^
+
