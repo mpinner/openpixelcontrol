@@ -24,21 +24,22 @@ void ws2801_put_pixels(int fd, u8 spi_data_tx[], u32 spi_speed_hz,
   u8* d;
 
   u16 lower = 0;
+
+   //fprintf(stderr, "Did not recognize color order argument - using default\n");
+
   
   d = spi_data_tx;
   for (i = 0, p = pixels; i < count; i++, p++) {
 
     u16 fullPixel = (p->r+p->r+p->r + p->g+p->g+p->g+p->g + p->b ) << 1;    
-    // full shoul dnow be in the 12-bit space
     
-    if (0 == (i % 2)) {
-      *d++ = fullPixel >> 4;
-      lower = fullPixel;
-    } else {
-      
-      *d++ = fullPixel >> 8;
-      *d++ = fullPixel & 0xF;
-    }
+    //although this creates a 16 space the spi out at 12 bits truncates each data value
+
+    *d++ = fullPixel;
+    *d++ = fullPixel >> 8;
+    
+
+
   }
   spi_transfer(fd, spi_speed_hz, spi_data_tx, 0, 
       d - spi_data_tx, POST_TX_DELAY_USECS);
