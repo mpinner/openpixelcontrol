@@ -30,17 +30,17 @@ opc_source source = -1;
 int verbose = 0;
 
 // Camera parameters
-#define FOV_DEGREES 20
+#define FOV_DEGREES 5
 int orbiting = 0, dollying = 0;
 double start_angle, start_elevation, start_distance;
 int start_x, start_y;
 double orbit_angle = 192.0;  // camera orbit angle, degrees
-double camera_elevation = -15;  // camera elevation angle, degrees
-double camera_distance = 16.0;  // distance from origin, metres
+double camera_elevation = 0;  // camera elevation angle, degrees
+double camera_distance = 100.0;  // distance from origin, metres
 double camera_aspect = 1.0;  // will be updated to match window aspect ratio
 
 // Shape parameters
-#define SHAPE_THICKNESS 0.06  // thickness of points and lines, metres
+#define SHAPE_THICKNESS 0.1  // thickness of points and lines, metres
 
 // LED colours
 #define MAX_PIXELS 30000
