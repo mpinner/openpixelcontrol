@@ -13,6 +13,7 @@ specific language governing permissions and limitations under the License. */
 #include <stdlib.h>
 #include "opc.h"
 
+
 void handler(u8 channel, u16 count, pixel* pixels) {
   int i = 0;
   char* sep = " =";
@@ -31,7 +32,7 @@ void handler(u8 channel, u16 count, pixel* pixels) {
 int main(int argc, char** argv) {
   u16 port = argc > 1 ? atoi(argv[1]) : OPC_DEFAULT_PORT;
   opc_source s = opc_new_source(port);
-  while (s >= 0) {
-    opc_receive(s, handler, 10000);
-  }
+  u32 timeout = 10000;
+  while (s >= 0 && opc_receive(s, handler, timeout));
+  fprintf(stderr, "Exiting after %d ms of inactivity\n", timeout);
 }
