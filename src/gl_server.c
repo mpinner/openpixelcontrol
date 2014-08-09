@@ -52,10 +52,18 @@ typedef struct {
   double r, g, b;
 } colour;
 
+
 colour tmp_colour;
 #define set_colour(c) ((tmp_colour = c), glColor3dv(&(tmp_colour.r)))
 #define set_rgb(r, g, b) (glColor3d(r, g, b))
 colour xfer[256];
+
+
+typedef int bool;
+#define true 1
+#define false 0
+bool isBlackAndWhite = true;
+
 
 // Vector arithmetic
 typedef struct {
@@ -120,14 +128,26 @@ typedef struct shape {
 int num_shapes = 0;
 shape shapes[MAX_SHAPES];
 
+double calcBrightness(pixel p) {
+  return (xfer[p.r].r*3 + xfer[p.g].g*4 + xfer[p.b].b) / 8;
+}
+
 void draw_point(shape* this, GLUquadric* quad) {
   pixel p = pixels[this->index];
-  glColor3d(xfer[p.r].r, xfer[p.g].g, xfer[p.b].b);
+
+  if (isBlackAndWhite) {
+    double brightness = calcBrightness(p);
+    glColor3d(brightness, brightness, brightness);
+  } else {
+    glColor3d(xfer[p.r].r, xfer[p.g].g, xfer[p.b].b);
+  }
+
   glPushMatrix();
   glTranslatef(this->g.point.x, this->g.point.y, this->g.point.z);
   gluSphere(quad, SHAPE_THICKNESS/2, 6, 3);
   glPopMatrix();
 }
+
 
 void draw_line(shape* this, GLUquadric* quad) {
   pixel p = pixels[this->index];
