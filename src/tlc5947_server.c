@@ -25,16 +25,20 @@ void ws2801_put_pixels(int fd, u8 spi_data_tx[], u32 spi_speed_hz,
 
   u16 lower = 0;
 
-   //fprintf(stderr, "Did not recognize color order argument - using default\n");
-
   
   d = spi_data_tx;
-  for (i = 0, p = pixels; i < count; i++, p++) {
+  for (i = 0; i < count; i++) {
 
+    int rib = i / 24;
+    int position = 23 - (i % 24);
+    int remappedPixel = (rib * 24) + position;
+    p = &pixels[remappedPixel];
     u16 fullPixel = (p->r+p->r+p->r + p->g+p->g+p->g+p->g + p->b ) << 1;    
     
+    // todo make this debug output an argv
+    //  fprintf(stderr, "%d -> (%d,%d) -> %d : %d, %d, %d \n", i, rib, position, remappedPixel, p->r, p->g, p->b);    
+  
     //although this creates a 16 space the spi out at 12 bits truncates each data value
-
     *d++ = fullPixel;
     *d++ = fullPixel >> 8;
     
