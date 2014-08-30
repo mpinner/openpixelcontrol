@@ -1,0 +1,1 @@
+javac -classpath /Applications/Processing.app/Contents/Resources/Java/core/library/core.jar:/Applications/Processing.app/Contents/Resources/Java/modes/java/libraries/net/library/net.jar -d ./src/ ./src/*.java && cd src/ && jar -cf ../library/img2opc.jar ./img2opc && cp ../library/img2opc.jar ~/Documents/Processing/libraries/img2opc/library/ && cd ..
