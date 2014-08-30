@@ -10,16 +10,17 @@ import processing.net.*;
 Movie m;
 Img2Opc i2o;
 PImage resized;
-int displayWidth = 25;
-int displayHeight = 25;
+int displayWidth = 60;
+int displayHeight = 24;
 Movie endingMovie = null;
 
 void setup() {
 
   background(0);
-  size(1024, 768);
+  size(600 , 480);
 
-  i2o = new Img2Opc(this, "127.0.0.1", 7890, displayWidth, displayHeight);
+ // i2o = new Img2Opc(this, "127.0.0.1", 7890, displayWidth, displayHeight);
+  i2o = new Img2Opc(this, "white", 7890, displayWidth, displayHeight);
   loadMovie();
 }
 
@@ -42,7 +43,7 @@ void loadMovie() {
 
   String f;
   do {
-   f = filenames[int(random(filenames.length))]
+   f = filenames[int(random(filenames.length))];
   } while (f.equals(".DS_Store"));
   print("loading '");
   print(f);
