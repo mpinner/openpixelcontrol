@@ -17,16 +17,16 @@ specific language governing permissions and limitations under the License. */
 void handler(u8 channel, u16 count, pixel* pixels) {
   int i = 0;
   char* sep = " =";
-  printf("-> channel %d: %d pixel%s", channel, count, count == 1 ? "" : "s");
+  //printf("-> channel %d: %d pixel%s", channel, count, count == 1 ? "" : "s");
   for (i = 0; i < count; i++) {
     if (i >= 4) {
-      printf(", ...");
+      //printf(", ...");
       break;
     }
-    printf("%s %02x %02x %02x", sep, pixels[i].r, pixels[i].g, pixels[i].b);
+    //printf("%s %02x %02x %02x", sep, pixels[i].r, pixels[i].g, pixels[i].b);
     sep = ",";
   }
-  printf("\n");
+  //printf("\n");
 }
 
 int main(int argc, char** argv) {
