@@ -4,9 +4,10 @@ openpixelcontrol
 A simple stream protocol for controlling RGB lighting, particularly RGB LEDs.
 See http://openpixelcontrol.org/ for a spec.
 
+![image](https://github.com/mpinner/openpixelcontrol/raw/master/Processing/data/output_rPwgLz.gif)
 
-
-Processing Quickstart
+ 
+ Quickstart
 ---------------------
 
 processing 3 : very experiemental
