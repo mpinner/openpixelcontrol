@@ -37,8 +37,8 @@ println( dataPath("") );
   background(0);
   size(600 , 480);
 
-  i2o = new Img2Opc(this, "white-shop", 7890, displayWidth, displayHeight);
-  //i2oLocal = new Img2Opc(this, "localhost", 7890, displayWidth, displayHeight);
+  //i2o = new Img2Opc(this, "white", 7890, displayWidth, displayHeight);
+  i2o = new Img2Opc(this, "localhost", 7890, displayWidth, displayHeight);
   loadMovie();
 }
 
@@ -79,7 +79,7 @@ void movieEvent(Movie mov) {
     return;
   }
   mov.read();
-  resized = i2o.sendImg(mov);
+  resized = i2o.sendImg(mov, true);
   //resized = i2oLocal.sendImg(mov);
 
   if (mov.time() >= mov.duration() - 0.1) {

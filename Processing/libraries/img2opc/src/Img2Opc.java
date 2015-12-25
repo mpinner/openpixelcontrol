@@ -27,7 +27,11 @@ public class Img2Opc extends PApplet implements PConstants {
   int srcx, srcy, srcw, srch;
   byte[] opcData;
   Client client;
+
   byte[] gamma;
+
+  String host;
+  int port;
 
   public Img2Opc(PApplet parent, String host, int port, int w, int h) {
     this.parent = parent;
@@ -57,7 +61,10 @@ public class Img2Opc extends PApplet implements PConstants {
 
     setSourceSize(dispWidth, dispHeight);
 
-    client = new Client(parent, host, port);
+    this.host = host;
+    this.port = port;
+    makeClient();
+
     // The server will hang up after a short period of inactivity.
     // Send a blank image and hope sendImg() is called soon.
     sendImg(new PImage(dispWidth, dispHeight));
@@ -72,18 +79,29 @@ public class Img2Opc extends PApplet implements PConstants {
   }
 
   public PImage sendImg(PImage m) {
+      return sendImg(m, false);
+  }
+
+  public PImage sendImg(PImage m, boolean renderFromBelow) {
     resizedFrame.copy(m, srcx, srcy, srcw, srch, 0, 0, resizedFrame.width, resizedFrame.height);
 
     for (int x = 0; x < dispWidth; x++) {
       for (int y = 0; y < dispHeight; y++) {
         int c = resizedFrame.pixels[x + y * dispWidth];
-        //int pixelPos = 4 + 3 * (x * dispHeight + ((x % 2 == 0) ? y : (dispHeight - 1 - y)));
-        int pixelPos = 4 + 3 * (x * dispHeight + getZ(x,y) );
-        opcData[pixelPos + 0] = gamma[(byte)(c >> 16 & 0xFF) & 0xFF];
+        int pixelPos;
+	      if (renderFromBelow) {
+	        pixelPos = 4 + 3 * (x * dispHeight + y);
+	      } else {
+	        pixelPos = 4 + 3 * (x * dispHeight + getZ(x,y) );
+        }
+	      opcData[pixelPos + 0] = gamma[(byte)(c >> 16 & 0xFF) & 0xFF];
         opcData[pixelPos + 1] = gamma[(byte)(c >> 8  & 0xFF) & 0xFF];
         opcData[pixelPos + 2] = gamma[(byte)(c >> 0  & 0xFF) & 0xFF];
       }
     }
+
+
+    boolean connected = true;
     if (client != null) {
       if (client.output != null) {
         try {
@@ -91,11 +109,39 @@ public class Img2Opc extends PApplet implements PConstants {
           client.output.flush();
         } catch (Exception e) {
           e.printStackTrace();
+          connected = false;
+
+
         }
       }
     }
 
+  /*
+    try {
+      if (client.input.read() == -1) {
+        println("end of stream thingie....");
+        connected = false;
+      }
+    } catch (Exception e) {
+      System.err.println("Client SocketException: " + e.getMessage());
+      connected = false;
+    }
+    */
+    
+    if (false == connected) {
+      println("connection issue detected. attempting reconnect...");
+      makeClient();
+    }
+
     return resizedFrame;
+  }
+
+  public void makeClient () {
+    if (client != null) {
+      client.stop();
+    }
+    client = new Client(parent, host, port);
+    return;
   }
 
   int getZ(int x, int y) {

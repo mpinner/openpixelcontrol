@@ -10,8 +10,8 @@ import img2opc.*;
 Capture cam;
 Img2Opc i2o;
 
-int displayWidth = 25;
-int displayHeight = 25;
+int displayWidth = 60;
+int displayHeight = 24;
 
 void setup() {
   background(0);
@@ -23,7 +23,7 @@ void setup() {
   int target = millis() + 1000;
   while (millis() < target) { }
 
-  i2o = new Img2Opc(this, "127.0.0.1", 7890, displayWidth, displayHeight);
+  i2o = new Img2Opc(this, "white", 7890, displayWidth, displayHeight);
   i2o.setSourceSize(640, 480);
 }
 
