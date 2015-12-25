@@ -52,8 +52,10 @@ void oscEvent(OscMessage msg) {
 
 
   if (msg.addrPattern().startsWith("/cursor")) {
-    cursorX = (int) map (msg.get(0).floatValue(), 0.0, 1.0, 0, width); 
-    cursorY = (int) map (msg.get(1).floatValue(), 0.0, 1.0, 0, height);
+    float x = msg.get(0).floatValue();
+    float y = msg.get(1).floatValue();
+    cursorX = (int) map (x, 0.0, 1.0, 0, width); 
+    cursorY = (int) map (y, 0.0, 1.0, 0, height);
 
   }
 }
