@@ -18,7 +18,7 @@ void setup()
 
 
   // Load a sample image
-  dot = loadImage("dot.png");
+  dot = loadImage("images.jpeg");
 
   // Connect to the local instance of fcserver
   opc = new OPC(this, "127.0.0.1", 7890);
@@ -28,35 +28,49 @@ void setup()
 }
 
 
-  // Set the location of 64 LEDs arranged in a uniform 8x8 grid.
-  // (x,y) is the center of the grid.
-  void ledGrid8x1(OPC opc, int index, float x, float y, float spacing, float angle, boolean zigzag)
-  {
-    opc.ledGrid(index, 8, 1, x, y, spacing, spacing, angle, zigzag);
-  }
+// Set the location of 64 LEDs arranged in a uniform 8x8 grid.
+// (x,y) is the center of the grid.
+void ledGrid8x1(OPC opc, int index, float x, float y, float spacing, float angle, boolean zigzag)
+{
+  opc.ledGrid(index, 8, 1, x, y, spacing, spacing, angle, zigzag);
+}
 
 void draw()
 {
   background(0);
 
   // Draw the image, centered at the mouse location
-  float dotSize = height * 0.7;
+  float dotSize = height * 1.5;
   image(dot, cursorX - dotSize/2, cursorY - dotSize/2, dotSize, dotSize);
 }
 
 
 void oscEvent(OscMessage msg) {
 
-  println("### done received an osc message. with address pattern "+msg.addrPattern());
-  println ("typetag: " + msg.typetag());
+//  println("### done received an osc message. with address pattern "+msg.addrPattern());
+//  println ("typetag: " + msg.typetag());
 
 
-  if (msg.addrPattern().startsWith("/cursor")) {
-    float x = msg.get(0).floatValue();
-    float y = msg.get(1).floatValue();
-    cursorX = (int) map (x, 0.0, 1.0, 0, width); 
-    cursorY = (int) map (y, 0.0, 1.0, 0, height);
+ 
+ if (msg.addrPattern().startsWith("/cursor")) {
+   float x = msg.get(0).floatValue();
+   float y = msg.get(1).floatValue();
+   cursorX = (int) map (x, 0.0, 1.0, 0, width); 
+   cursorY = (int) map (y, 0.0, 1.0, 0, height);
+   
+   }
+   
+  
 
+  if (msg.addrPattern().startsWith("/camera/zone/")) {
+
+    msg.addrPattern().lastIndexOf("/");
+
+    String zoneName = msg.addrPattern().substring(
+    msg.addrPattern().lastIndexOf("/")+1); 
+    int zone = Integer.parseInt(zoneName);
+    int area = msg.get(0).intValue();
+    println("zone=" + zone + " area=" + area);
   }
 }
 

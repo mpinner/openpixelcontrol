@@ -1,9 +1,8 @@
 /*
  * Simple Open Pixel Control client for Processing,
- * designed to sample each LED's color from some point on the canvas.
+ * ./mtou -I en14 -i 239.255.0.223 -p 10223 -o 127.0.0.1 -P 8005
  *
- * Micah Elizabeth Scott, 2013
- * This file is released into the public domain.
+c * <10.10.10.16> 239.255.0.223:10223 -> 127.0.0.1:8005
  */
 
 import java.net.*;

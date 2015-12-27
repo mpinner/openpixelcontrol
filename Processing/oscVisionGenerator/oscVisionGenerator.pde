@@ -23,10 +23,13 @@ int zoneWidth;
 
 int[] zoneArea = new int[30];
 
+int areaMax = 400;
+int areaSpike = 50;
+
 
 void setup() {
   size(500, 900);
-  frameRate(30);
+  frameRate(24);
   zoneHeight = height / rows;
   zoneWidth = width / columns;
 
@@ -46,8 +49,8 @@ void setup() {
    * and the port of the remote location address are the same, hence you will
    * send messages back to this sketch.
    */
-  myRemoteLocation = new NetAddress("127.0.0.1", 8005);
-}
+  myRemoteLocation = new NetAddress("10.10.10.55", 8010);
+  }
 
 
 
@@ -60,7 +63,13 @@ void draw() {
 
   for (int i =0; i < zones; i++) {
     drawRect(i);
+    fadeZone(i);
   }
+
+    //sendCursor();
+
+    sendZones();
+  return;  
 }
 
 void drawRect(int zone) {
@@ -73,7 +82,6 @@ void drawRect(int zone) {
 
   if (zone == getZone(mouseX, mouseY)) {
     fill(255, 0, 255);
-    sendCursor();
   } 
   else {
     fill(zoneArea[zone]);
@@ -83,6 +91,13 @@ void drawRect(int zone) {
   rect (rectX, rectY, zoneWidth, zoneHeight, 7);
 
   //println (zone + " " + column + " " + row + " " + rectX + " " + rectY);
+  return;
+}
+
+void fadeZone(int zone) {
+  if (50 < zoneArea[zone] ) {
+    zoneArea[zone] = zoneArea[zone] - 1;
+  }
   return;
 }
 
@@ -102,21 +117,19 @@ int getZone(int x, int y) {
 
 void mousePressed() {
 
-   sendCursor();
-
+  //sendCursor();
   setZone(getZone(mouseX, mouseY));
   
-//  sendZones();
+  sendZones();
+
   return;
 }
 
 void setZone ( int zoneId) {
-
-  if (50 == zoneArea[zoneId]) {
-    zoneArea[zoneId] = 100;
-  } 
-  else {
-    zoneArea[zoneId] = 50;
+  
+  zoneArea[zoneId] = zoneArea[zoneId] + areaSpike;
+  if (areaMax < zoneArea[zoneId]) {
+    zoneArea[zoneId] = areaSpike;
   }    
 
   return;
@@ -127,16 +140,18 @@ void setZone ( int zoneId) {
 void sendZones()
 {
 
+    //println ("sendingZone");
+
   for (int i =0; i < zones; i++) {
 
     /* create a new osc message object */
-    OscMessage myMessage = new OscMessage("/camera/zone" + (i+1));
+    OscMessage myMessage = new OscMessage("/camera/zone/" + (i+1));
 
 
-    for ( int hue = 0; hue < 7; hue++) {
-      myMessage.add(100); /* add an int to the osc message */
-      myMessage.add(100); /* add a float to the osc message */
-      myMessage.add(zoneArea[i]); /* add a string to the osc message */
+    for ( int hue = 0; hue < 3; hue++) {
+    //  myMessage.add(100); /* add an int to the osc message */
+    //  myMessage.add(100); /* add a float to the osc message */
+      myMessage.add(((float)zoneArea[i]/(float)areaMax)); /* add a string to the osc message */
     }
 
     /* send the message */
@@ -169,8 +184,8 @@ void sendCursor()
 
 void sendVision(OscMessage msg) {
   println ("camera: "+msg.addrPattern());
-  int x = msg.get(0).intValue(); 
-  int y = msg.get(1).intValue(); 
+ // int x = msg.get(0).intValue(); 
+ // int y = msg.get(1).intValue(); 
   int area = msg.get(2).intValue();
 }
 
